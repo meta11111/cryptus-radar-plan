@@ -23,9 +23,14 @@
       const xTokensCentral = provider === 'grok' ? 2 * posts / 200 * ratio : 0;
       const xTokensHigh = provider === 'grok' ? 6 * posts / 200 * ratio : 0;
       const researchCount = research === 'grok' ? dossiers * .5 * weeks : 0;
-      return {textCentral, textHigh, xTools, xTokensCentral, xTokensHigh, researchCount,
-        central: textCentral + xTools + xTokensCentral + researchCount * .144808,
-        high: textHigh + xTools + xTokensHigh + researchCount * .25};
+      // Proposed reader-question/evidence/angle card, within the existing
+      // detailed assessment call. Explicit extra allowance, not measured usage.
+      // Dated assessment rates: $1.25 input / $2.50 output per million tokens.
+      const editorialCentral = dossiers * weeks * (1000 * 1.25 + 500 * 2.5) / 1e6;
+      const editorialHigh = editorialCentral * 2;
+      return {textCentral, textHigh, xTools, xTokensCentral, xTokensHigh, researchCount, editorialCentral, editorialHigh,
+        central: textCentral + xTools + xTokensCentral + researchCount * .144808 + editorialCentral,
+        high: textHigh + xTools + xTokensHigh + researchCount * .25 + editorialHigh};
     };
     return {target, mode, provider, research, minutes, posts, dossiers, threads, redditRows, redditRuns, xRows, xRuns,
       average: apify(4.345), five: apify(5), fiveWithReserve: apify(5).total * 1.2,
